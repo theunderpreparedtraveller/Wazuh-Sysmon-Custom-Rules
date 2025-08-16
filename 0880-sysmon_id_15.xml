@@ -1,0 +1,22 @@
+
+<!--
+  Copyright (C) 2015, Wazuh Inc.
+-->
+
+<!--
+  Sysmon Event ID 11 rules 92200 - 92299
+-->
+
+<group name="sysmon,sysmon_eid11_detections,windows,">
+
+<rule id="92229" level="12">
+    <if_group>sysmon_event_15</if_group>
+    <field name="win.eventdata.targetFilename" type="pcre2">(?i)\.(exe|dll|bat|cmd|ps1|vbs|js|msi|hta|scr|com|cab|psd1|psm1|vb8|jse|docm|xlsm|zip)$</field>
+    <options>no_full_log</options>
+    <description>Scripting file moved to Windows Temp or User folder</description>
+    <mitre>
+      <id>T1059</id>
+      <id>T1105</id>
+    </mitre>
+  </rule>
+</group>
