@@ -1,0 +1,7 @@
+<group name="powershell">
+<rule id="100200" level="10">
+    <if_group>powershell</if_group>
+    <field name="win.system.providerName">Microsoft-Windows-PowerShell</field>
+    <description>PowerShell ScriptBlock logging detected</description>
+  </rule>
+</group>
