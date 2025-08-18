@@ -26,3 +26,20 @@
 </rule>
 
 </group>
+<group name="sysmon_dns,windows,">
+  <!-- Detect suspicious DNS queries from tools like PowerShell, wscript, rundll32 -->
+  <rule id="100100" level="10">
+    <if_group>sysmon_event22</if_group>
+    <field name="win.eventdata.image" type="pcre2">(?i)(powershell\.exe|wscript\.exe|cscript\.exe|rundll32\.exe|cmd\.exe)</field>
+    <description>Suspicious process making DNS query</description>
+    <mitre>
+      <id>T1071.004</id> <!-- MITRE ATT&CK: Application Layer Protocol: DNS -->
+    </mitre>
+  </rule>
+
+  <!-- Catch all DNS queries (debugging/visibility) -->
+  <rule id="100101" level="3">
+    <if_group>sysmon_event22</if_group>
+    <description>DNS query detected (Sysmon Event ID 22)</description>
+  </rule>
+</group>
