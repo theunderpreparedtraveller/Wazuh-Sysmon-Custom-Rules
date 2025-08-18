@@ -2,18 +2,14 @@
   <HashAlgorithms>sha256</HashAlgorithms>
   <EventFiltering>
 
-    <!-- 🧠 Process Creation (Event ID 1) -->
     <ProcessCreate onmatch="exclude">
-  <!-- Common noise exclusions -->
         <Image condition="is">C:\Windows\System32\svchost.exe</Image>
         <Image condition="is">C:\Windows\System32\dasHost.exe</Image>
         <Image condition="is">C:\Windows\System32\conhost.exe</Image>
-        <Image condition="is">C:\Windows\System32\WerFault.exe</Image>
-        <!-- Optional: exclude background service manager -->
+
     </ProcessCreate>
-    <!-- 🌐 Network Connection (Event ID 3) -->
     <NetworkConnect onmatch="exclude">
-      <!-- Exclude browsers only for normal web ports -->
+
       <Image condition="is">C:\Program Files\Google\Chrome\Application\chrome.exe</Image>
       <DestinationPort condition="is">80</DestinationPort>
       <DestinationPort condition="is">443</DestinationPort>
@@ -26,15 +22,12 @@
       <DestinationPort condition="is">80</DestinationPort>
       <DestinationPort condition="is">443</DestinationPort>
 
-      <!-- Exclude svchost only for known service ports -->
     </NetworkConnect>
     <NetworkConnect onmatch="exclude">
-  <!-- Fully exclude svchost.exe network activity -->
       <Image condition="is">C:\Windows\System32\svchost.exe</Image>
     </NetworkConnect>
 
      <ImageLoad onmatch="exclude">
-      <!-- Exclude common trusted DLL directories -->
       <ImageLoaded condition="begin with">C:\Windows\System32\</ImageLoaded>
       <ImageLoaded condition="begin with">C:\Windows\SysWOW64\</ImageLoaded>
       <ImageLoaded condition="begin with">C:\Windows\WinSxS\</ImageLoaded>
@@ -70,7 +63,6 @@
       <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Code Cache\</TargetFilename>
     </FileCreateTime>
     <FileCreate onmatch="include">
-      <!-- Critical Windows Directories -->
       <TargetFilename condition="begin with">C:\Windows\System32\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\SysWOW64\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\System\</TargetFilename>
@@ -78,7 +70,6 @@
       <TargetFilename condition="begin with">C:\Windows\SystemResources\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\Fonts\</TargetFilename>
 
-      <!-- Scheduled tasks & drivers -->
       <TargetFilename condition="begin with">C:\Windows\Tasks\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\System32\Tasks\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\System32\Drivers\</TargetFilename>
@@ -87,25 +78,22 @@
       <TargetFilename condition="begin with">%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\</TargetFilename>
       <TargetFilename condition="begin with">%LOCALAPPDATA%\Google\Chrome\User Data\Default\</TargetFilename>
 
-      <!-- Program installation paths -->
+
       <TargetFilename condition="begin with">C:\Program Files\</TargetFilename>
       <TargetFilename condition="begin with">C:\Program Files (x86)\</TargetFilename>
       <TargetFilename condition="begin with">C:\ProgramData\</TargetFilename>
       <TargetFilename condition="begin with">C:\Users\Public\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\INF\</TargetFilename>
 
-      <!-- User-specific AppData -->
       <TargetFilename condition="begin with">%APPDATA%\</TargetFilename>
       <TargetFilename condition="begin with">%LOCALAPPDATA%\</TargetFilename>
       <TargetFilename condition="begin with">%TEMP%\</TargetFilename>
        <TargetFilename condition="begin with">%USERPROFILE%\Downloads\</TargetFilename>
-      <!-- Browser & credentials -->
       <TargetFilename condition="begin with">%APPDATA%\Mozilla\Firefox\Profiles\</TargetFilename>
       <TargetFilename condition="begin with">%LOCALAPPDATA%\Microsoft\Edge\User Data\</TargetFilename>
       <TargetFilename condition="begin with">%LOCALAPPDATA%\Microsoft\Credentials\</TargetFilename>
       <TargetFilename condition="begin with">%APPDATA%\Microsoft\Windows\Recent\</TargetFilename>
 
-      <!-- Boot & security config -->
       <TargetFilename condition="begin with">C:\Boot\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\Boot\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\security\</TargetFilename>
@@ -114,9 +102,7 @@
       <TargetFilename condition="begin with">C:\Windows\Resources\</TargetFilename>
     </FileCreate>
 
-    <!-- === FILE MODIFICATIONS (Timestamp or Attribute Changes) === -->
     <FileCreateTime onmatch="include">
-      <!-- Critical Windows Directories -->
       <TargetFilename condition="begin with">C:\Windows\System32\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\SysWOW64\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\System\</TargetFilename>
@@ -127,8 +113,6 @@
       <TargetFilename condition="begin with">C:\ProgramData\</TargetFilename>
       <TargetFilename condition="begin with">C:\Program Files\</TargetFilename>
       <TargetFilename condition="begin with">C:\Program Files (x86)\</TargetFilename>
-
-      <!-- Scripts & Executables in User-Accessible Directories -->
       <TargetFilename condition="begin with">C:\Users\</TargetFilename>
       <TargetFilename condition="end with">.exe</TargetFilename>
       <TargetFilename condition="end with">.bat</TargetFilename>
@@ -139,9 +123,7 @@
       <TargetFilename condition="end with">.hta</TargetFilename>
     </FileCreateTime>
 
-    <!-- === FILE DELETIONS === -->
     <FileDelete onmatch="include">
-      <!-- Critical Windows Directories -->
       <TargetFilename condition="begin with">C:\Windows\System32\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\SysWOW64\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\System\</TargetFilename>
@@ -149,8 +131,6 @@
       <TargetFilename condition="begin with">C:\ProgramData\</TargetFilename>
       <TargetFilename condition="begin with">C:\Program Files\</TargetFilename>
       <TargetFilename condition="begin with">C:\Program Files (x86)\</TargetFilename>
-
-      <!-- Scripts & Executables in User-Accessible Directories -->
       <TargetFilename condition="begin with">C:\Users\</TargetFilename>
       <TargetFilename condition="end with">.exe</TargetFilename>
       <TargetFilename condition="end with">.bat</TargetFilename>
@@ -161,7 +141,6 @@
       <TargetFilename condition="end with">.hta</TargetFilename>
     </FileDelete>
 
-    <!-- === FILE DELETE DETECTED (Volume Shadow Copies & Critical Areas) === -->
     <FileDeleteDetected onmatch="include">
       <TargetFilename condition="begin with">\\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy</TargetFilename>
     </FileDeleteDetected>
