@@ -43,3 +43,31 @@
     <description>DNS query detected (Sysmon Event ID 22)</description>
   </rule>
 </group>
+<group name="windows,local_admin_login,">
+  <rule id="94001" level="10">
+    <if_sid>60101</if_sid> <!-- 4624 Successful Logon -->
+    <field name="win.eventdata.targetUserName" type="pcre2">(?i)Administrator</field>
+    <time>20:00-07:59</time>
+    <description>Local Administrator login detected during non-business hours</description>
+    <mitre>
+      <id>T1078</id> <!-- Valid Accounts -->
+    </mitre>
+  </rule>
+  <rule id="94002" level="12">
+    <if_sid>60105</if_sid> <!-- 4720 -->
+    <description>New user account created</description>
+    <mitre>
+      <id>T1136</id> <!-- Create Account -->
+    </mitre>
+  </rule>
+
+  <!-- User added to Administrators group -->
+  <rule id="94003" level="12">
+    <if_sid>60107</if_sid> <!-- 4732 -->
+    <field name="win.eventdata.targetUserName" type="pcre2">(?i)Administrators</field>
+    <description>User added to local Administrators group</description>
+    <mitre>
+      <id>T1098</id> <!-- Account Manipulation -->
+    </mitre>
+  </rule>
+</group>
