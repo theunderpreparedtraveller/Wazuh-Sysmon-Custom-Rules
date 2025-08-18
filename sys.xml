@@ -1,0 +1,216 @@
+<Sysmon schemaversion="4.9">
+  <HashAlgorithms>sha256</HashAlgorithms>
+  <EventFiltering>
+
+    <!-- 🧠 Process Creation (Event ID 1) -->
+    <ProcessCreate onmatch="exclude">
+  <!-- Common noise exclusions -->
+        <Image condition="is">C:\Windows\System32\svchost.exe</Image>
+        <Image condition="is">C:\Windows\System32\dasHost.exe</Image>
+        <Image condition="is">C:\Windows\System32\conhost.exe</Image>
+        <Image condition="is">C:\Windows\System32\WerFault.exe</Image>
+        <!-- Optional: exclude background service manager -->
+    </ProcessCreate>
+    <!-- 🌐 Network Connection (Event ID 3) -->
+    <NetworkConnect onmatch="exclude">
+      <!-- Exclude browsers only for normal web ports -->
+      <Image condition="is">C:\Program Files\Google\Chrome\Application\chrome.exe</Image>
+      <DestinationPort condition="is">80</DestinationPort>
+      <DestinationPort condition="is">443</DestinationPort>
+
+      <Image condition="is">C:\Program Files\Mozilla Firefox\firefox.exe</Image>
+      <DestinationPort condition="is">80</DestinationPort>
+      <DestinationPort condition="is">443</DestinationPort>
+
+      <Image condition="is">C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe</Image>
+      <DestinationPort condition="is">80</DestinationPort>
+      <DestinationPort condition="is">443</DestinationPort>
+
+      <!-- Exclude svchost only for known service ports -->
+    </NetworkConnect>
+    <NetworkConnect onmatch="exclude">
+  <!-- Fully exclude svchost.exe network activity -->
+      <Image condition="is">C:\Windows\System32\svchost.exe</Image>
+    </NetworkConnect>
+
+     <ImageLoad onmatch="exclude">
+      <!-- Exclude common trusted DLL directories -->
+      <ImageLoaded condition="begin with">C:\Windows\System32\</ImageLoaded>
+      <ImageLoaded condition="begin with">C:\Windows\SysWOW64\</ImageLoaded>
+      <ImageLoaded condition="begin with">C:\Windows\WinSxS\</ImageLoaded>
+      <ImageLoaded condition="begin with">C:\Windows\Microsoft.NET\</ImageLoaded>
+    </ImageLoad>
+
+    <FileCreate onmatch="exclude">
+      <TargetFilename condition="begin with">C:\Program Files (x86)\ossec-agent\</TargetFilename>
+      <TargetFilename condition="contains">\AppData\Roaming\Mozilla\Firefox\Profiles\</TargetFilename>
+      <TargetFilename condition="contains">\AppData\Local\Mozilla\Firefox\Profiles\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Program Files (x86)\ossec-agent\</TargetFilename>
+      <TargetFilename condition="begin with">\AppData\Roaming\Microsoft\Windows\Recent\CustomDestinations\</TargetFilename>
+      <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Cache\</TargetFilename>
+      <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Code Cache\</TargetFilename>
+      <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Profile 22\Code Cache\</TargetFilename>
+
+    </FileCreate>
+    <FileDelete onmatch="exclude">
+      <TargetFilename condition="begin with">C:\Program Files (x86)\ossec-agent\</TargetFilename>
+       <TargetFilename condition="contains">\AppData\Roaming\Mozilla\Firefox\Profiles\</TargetFilename>
+      <TargetFilename condition="contains">\AppData\Local\Mozilla\Firefox\Profiles\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Program Files (x86)\ossec-agent\</TargetFilename>
+       <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Cache\</TargetFilename>
+      <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Code Cache\</TargetFilename>
+      <TargetFilename condition="begin with">\AppData\Roaming\Microsoft\Windows\Recent\CustomDestinations\</TargetFilename>
+    </FileDelete>
+    <FileCreateTime onmatch="exclude">
+      <TargetFilename condition="contains">\AppData\Roaming\Mozilla\Firefox\Profiles\</TargetFilename>
+      <TargetFilename condition="contains">\AppData\Local\Mozilla\Firefox\Profiles\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Program Files (x86)\ossec-agent\</TargetFilename>
+      <TargetFilename condition="begin with">\AppData\Roaming\Microsoft\Windows\Recent\CustomDestinations\</TargetFilename>
+       <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Cache\</TargetFilename>
+      <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Code Cache\</TargetFilename>
+    </FileCreateTime>
+    <FileCreate onmatch="include">
+      <!-- Critical Windows Directories -->
+      <TargetFilename condition="begin with">C:\Windows\System32\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\SysWOW64\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\System\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\WinSxS\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\SystemResources\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\Fonts\</TargetFilename>
+
+      <!-- Scheduled tasks & drivers -->
+      <TargetFilename condition="begin with">C:\Windows\Tasks\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\System32\Tasks\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\System32\Drivers\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\System32\spool\drivers\</TargetFilename>
+      <TargetFilename condition="begin with">C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\</TargetFilename>
+      <TargetFilename condition="begin with">%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\</TargetFilename>
+      <TargetFilename condition="begin with">%LOCALAPPDATA%\Google\Chrome\User Data\Default\</TargetFilename>
+
+      <!-- Program installation paths -->
+      <TargetFilename condition="begin with">C:\Program Files\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Program Files (x86)\</TargetFilename>
+      <TargetFilename condition="begin with">C:\ProgramData\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Users\Public\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\INF\</TargetFilename>
+
+      <!-- User-specific AppData -->
+      <TargetFilename condition="begin with">%APPDATA%\</TargetFilename>
+      <TargetFilename condition="begin with">%LOCALAPPDATA%\</TargetFilename>
+      <TargetFilename condition="begin with">%TEMP%\</TargetFilename>
+       <TargetFilename condition="begin with">%USERPROFILE%\Downloads\</TargetFilename>
+      <!-- Browser & credentials -->
+      <TargetFilename condition="begin with">%APPDATA%\Mozilla\Firefox\Profiles\</TargetFilename>
+      <TargetFilename condition="begin with">%LOCALAPPDATA%\Microsoft\Edge\User Data\</TargetFilename>
+      <TargetFilename condition="begin with">%LOCALAPPDATA%\Microsoft\Credentials\</TargetFilename>
+      <TargetFilename condition="begin with">%APPDATA%\Microsoft\Windows\Recent\</TargetFilename>
+
+      <!-- Boot & security config -->
+      <TargetFilename condition="begin with">C:\Boot\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\Boot\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\security\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\Registration\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\Prefetch\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\Resources\</TargetFilename>
+    </FileCreate>
+
+    <!-- === FILE MODIFICATIONS (Timestamp or Attribute Changes) === -->
+    <FileCreateTime onmatch="include">
+      <!-- Critical Windows Directories -->
+      <TargetFilename condition="begin with">C:\Windows\System32\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\SysWOW64\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\System\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\Tasks\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\Temp\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\Debug\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\Fonts\</TargetFilename>
+      <TargetFilename condition="begin with">C:\ProgramData\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Program Files\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Program Files (x86)\</TargetFilename>
+
+      <!-- Scripts & Executables in User-Accessible Directories -->
+      <TargetFilename condition="begin with">C:\Users\</TargetFilename>
+      <TargetFilename condition="end with">.exe</TargetFilename>
+      <TargetFilename condition="end with">.bat</TargetFilename>
+      <TargetFilename condition="end with">.cmd</TargetFilename>
+      <TargetFilename condition="end with">.vbs</TargetFilename>
+      <TargetFilename condition="end with">.ps1</TargetFilename>
+      <TargetFilename condition="end with">.js</TargetFilename>
+      <TargetFilename condition="end with">.hta</TargetFilename>
+    </FileCreateTime>
+
+    <!-- === FILE DELETIONS === -->
+    <FileDelete onmatch="include">
+      <!-- Critical Windows Directories -->
+      <TargetFilename condition="begin with">C:\Windows\System32\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\SysWOW64\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\System\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Windows\Tasks\</TargetFilename>
+      <TargetFilename condition="begin with">C:\ProgramData\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Program Files\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Program Files (x86)\</TargetFilename>
+
+      <!-- Scripts & Executables in User-Accessible Directories -->
+      <TargetFilename condition="begin with">C:\Users\</TargetFilename>
+      <TargetFilename condition="end with">.exe</TargetFilename>
+      <TargetFilename condition="end with">.bat</TargetFilename>
+      <TargetFilename condition="end with">.cmd</TargetFilename>
+      <TargetFilename condition="end with">.vbs</TargetFilename>
+      <TargetFilename condition="end with">.ps1</TargetFilename>
+      <TargetFilename condition="end with">.js</TargetFilename>
+      <TargetFilename condition="end with">.hta</TargetFilename>
+    </FileDelete>
+
+    <!-- === FILE DELETE DETECTED (Volume Shadow Copies & Critical Areas) === -->
+    <FileDeleteDetected onmatch="include">
+      <TargetFilename condition="begin with">\\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy</TargetFilename>
+    </FileDeleteDetected>
+    <FileCreate onmatch="include">
+      <TargetFilename condition="end with">.exe</TargetFilename>
+      <TargetFilename condition="end with">.dll</TargetFilename>
+      <TargetFilename condition="end with">.bat</TargetFilename>
+      <TargetFilename condition="end with">.cmd</TargetFilename>
+      <TargetFilename condition="end with">.ps1</TargetFilename>
+      <TargetFilename condition="end with">.vbs</TargetFilename>
+      <TargetFilename condition="end with">.js</TargetFilename>
+      <TargetFilename condition="end with">.msi</TargetFilename>
+      <TargetFilename condition="end with">.hta</TargetFilename>
+      <TargetFilename condition="end with">.scr</TargetFilename>
+      <TargetFilename condition="end with">.dll</TargetFilename>
+      <TargetFilename condition="end with">.com</TargetFilename>
+      <TargetFilename condition="end with">.cab</TargetFilename>
+      <TargetFilename condition="end with">.psd1</TargetFilename>
+      <TargetFilename condition="end with">.psm1</TargetFilename>
+      <TargetFilename condition="end with">.vb8</TargetFilename>
+      <TargetFilename condition="end with">.jse</TargetFilename>
+      <TargetFilename condition="end with">.docm</TargetFilename>
+      <TargetFilename condition="end with">.xlsm</TargetFilename>
+      <TargetFilename condition="end with">.pptm</TargetFilename>
+    </FileCreate>
+    <FileCreateStreamHash onmatch="include">
+      <TargetFilename condition="end with">.exe</TargetFilename>
+      <TargetFilename condition="end with">.dll</TargetFilename>
+      <TargetFilename condition="end with">.bat</TargetFilename>
+      <TargetFilename condition="end with">.cmd</TargetFilename>
+      <TargetFilename condition="end with">.ps1</TargetFilename>
+      <TargetFilename condition="end with">.vbs</TargetFilename>
+      <TargetFilename condition="end with">.js</TargetFilename>
+      <TargetFilename condition="end with">.msi</TargetFilename>
+      <TargetFilename condition="end with">.hta</TargetFilename>
+      <TargetFilename condition="end with">.scr</TargetFilename>
+      <TargetFilename condition="end with">.dll</TargetFilename>
+      <TargetFilename condition="end with">.com</TargetFilename>
+      <TargetFilename condition="end with">.cab</TargetFilename>
+      <TargetFilename condition="end with">.psd1</TargetFilename>
+      <TargetFilename condition="end with">.psm1</TargetFilename>
+      <TargetFilename condition="end with">.vb8</TargetFilename>
+      <TargetFilename condition="end with">.jse</TargetFilename>
+      <TargetFilename condition="end with">.docm</TargetFilename>
+      <TargetFilename condition="end with">.xlsm</TargetFilename>
+      <TargetFilename condition="end with">.pptm</TargetFilename>
+    </FileCreateStreamHash>
+    <DnsQuery onmatch="include">
+      <QueryName condition="is">*</QueryName>
+    </DnsQuery>
+  </EventFiltering>
+</Sysmon>
