@@ -1,7 +1,28 @@
 <group name="powershell">
-<rule id="100200" level="10">
+  <rule id="100200" level="10">
     <if_group>powershell</if_group>
     <field name="win.system.providerName">Microsoft-Windows-PowerShell</field>
     <description>PowerShell ScriptBlock logging detected</description>
   </rule>
+  <rule id="95001" level="10">
+  <if_group>windows,security_event</if_group>
+  <field name="win.system.eventID">4624</field>
+  <field name="win.eventdata.LogonType">10</field>
+  <description>Successful RDP login detected</description>
+  <mitre>
+    <id>T1076</id> <!-- Remote Desktop Protocol -->
+    <id>T1021</id> <!-- Remote Services -->
+  </mitre>
+</rule>
+<rule id="95002" level="8">
+  <if_group>windows,security_event</if_group>
+  <field name="win.system.eventID">4625</field>
+  <field name="win.eventdata.LogonType">10</field>
+  <description>Failed RDP login attempt detected</description>
+  <mitre>
+    <id>T1076</id>
+    <id>T1021</id>
+  </mitre>
+</rule>
+
 </group>
