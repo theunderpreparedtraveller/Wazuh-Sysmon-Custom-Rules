@@ -26,23 +26,6 @@
 </rule>
 
 </group>
-<group name="sysmon_dns,windows,">
-  <!-- Detect suspicious DNS queries from tools like PowerShell, wscript, rundll32 -->
-  <rule id="100100" level="10">
-    <if_group>sysmon_event22</if_group>
-    <field name="win.eventdata.image" type="pcre2">(?i)(powershell\.exe|wscript\.exe|cscript\.exe|rundll32\.exe|cmd\.exe)</field>
-    <description>Suspicious process making DNS query</description>
-    <mitre>
-      <id>T1071.004</id> <!-- MITRE ATT&CK: Application Layer Protocol: DNS -->
-    </mitre>
-  </rule>
-
-  <!-- Catch all DNS queries (debugging/visibility) -->
-  <rule id="100101" level="3">
-    <if_group>sysmon_event22</if_group>
-    <description>DNS query detected (Sysmon Event ID 22)</description>
-  </rule>
-</group>
 <group name="windows,local_admin_login,">
   <rule id="94001" level="10">
     <if_sid>60101</if_sid> <!-- 4624 Successful Logon -->
@@ -73,9 +56,23 @@
   
 </group>
 <group name="windows,dns,">
-  <rule id="100200" level="3">
+ <rule id="200001" level="3">
+    <if_group>windows</if_group>
+    <event_id>3006</event_id>
+    <description>DNS Query: $(win.eventdata.queryName) [Type: $(win.eventdata.queryType)]</description>
+    <mitre>
+      <id>T1071.004</id> <!-- Application Layer Protocol: DNS -->
+    </mitre>
+  </rule>
+
+  <!-- Failed DNS Query (Event ID 3008) -->
+  <rule id="200002" level="5">
     <if_group>windows</if_group>
     <event_id>3008</event_id>
-    <description>Windows DNS Query logged for: $(win.eventdata.queryName)</description>
+    <description>Failed DNS Query: $(win.eventdata.queryName) [Type: $(win.eventdata.queryType)]</description>
+    <mitre>
+      <id>T1071.004</id>
+    </mitre>
   </rule>
+
 </group>
