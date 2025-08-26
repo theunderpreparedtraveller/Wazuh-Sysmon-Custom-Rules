@@ -56,19 +56,21 @@
   
 </group>
 <group name="windows,dns,">
- <rule id="200001" level="3">
+
+  <!-- Successful DNS Query (Event ID 3006) -->
+  <rule id="200001" level="3">
     <if_group>windows</if_group>
-    <event_id>3006</event_id>
+    <field name="win.system.eventID">3006</field>
     <description>DNS Query: $(win.eventdata.queryName) [Type: $(win.eventdata.queryType)]</description>
     <mitre>
-      <id>T1071.004</id> <!-- Application Layer Protocol: DNS -->
+      <id>T1071.004</id>
     </mitre>
   </rule>
 
   <!-- Failed DNS Query (Event ID 3008) -->
   <rule id="200002" level="5">
     <if_group>windows</if_group>
-    <event_id>3008</event_id>
+    <field name="win.system.eventID">3008</field>
     <description>Failed DNS Query: $(win.eventdata.queryName) [Type: $(win.eventdata.queryType)]</description>
     <mitre>
       <id>T1071.004</id>
@@ -76,3 +78,4 @@
   </rule>
 
 </group>
+
