@@ -70,4 +70,12 @@
       <id>T1098</id> <!-- Account Manipulation -->
     </mitre>
   </rule>
+  
+</group>
+<group name="windows,dns,">
+  <rule id="100200" level="3">
+    <if_group>windows</if_group>
+    <event_id>3008</event_id>
+    <description>Windows DNS Query logged for: $(win.eventdata.queryName)</description>
+  </rule>
 </group>
