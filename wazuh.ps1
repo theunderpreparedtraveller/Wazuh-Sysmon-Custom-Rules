@@ -33,3 +33,4 @@ Start-Process -FilePath $sysmonExe.FullName -ArgumentList "-accepteula -i `"$con
 
 Write-Host "[+] Sysmon installed successfully!"
 wevtutil set-log Microsoft-Windows-DNS-Client/Operational /enabled:true
+wevtutil set-log Microsoft-Windows-TaskScheduler/Operational /enabled:true
