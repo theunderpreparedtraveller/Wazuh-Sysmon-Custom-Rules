@@ -32,3 +32,4 @@ Write-Host "[*] Installing Sysmon service..."
 Start-Process -FilePath $sysmonExe.FullName -ArgumentList "-accepteula -i `"$configPath`"" -Wait -Verb RunAs
 
 Write-Host "[+] Sysmon installed successfully!"
+wevtutil set-log Microsoft-Windows-DNS-Client/Operational /enabled:true

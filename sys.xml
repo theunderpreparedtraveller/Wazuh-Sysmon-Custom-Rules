@@ -33,35 +33,16 @@
       <ImageLoaded condition="begin with">C:\Windows\WinSxS\</ImageLoaded>
       <ImageLoaded condition="begin with">C:\Windows\Microsoft.NET\</ImageLoaded>
     </ImageLoad>
-
+    
+   
     <FileCreate onmatch="exclude">
       <TargetFilename condition="begin with">C:\Program Files (x86)\ossec-agent\</TargetFilename>
       <TargetFilename condition="contains">\AppData\Roaming\Mozilla\Firefox\Profiles\</TargetFilename>
       <TargetFilename condition="contains">\AppData\Local\Mozilla\Firefox\Profiles\</TargetFilename>
-      <TargetFilename condition="begin with">C:\Program Files (x86)\ossec-agent\</TargetFilename>
-      <TargetFilename condition="begin with">\AppData\Roaming\Microsoft\Windows\Recent\CustomDestinations\</TargetFilename>
       <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Cache\</TargetFilename>
       <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Code Cache\</TargetFilename>
-      <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Profile 22\Code Cache\</TargetFilename>
-
+      <TargetFilename condition="contains">\AppData\Roaming\Microsoft\Windows\Recent\CustomDestinations\</TargetFilename>
     </FileCreate>
-    <FileDelete onmatch="exclude">
-      <TargetFilename condition="begin with">C:\Program Files (x86)\ossec-agent\</TargetFilename>
-       <TargetFilename condition="contains">\AppData\Roaming\Mozilla\Firefox\Profiles\</TargetFilename>
-      <TargetFilename condition="contains">\AppData\Local\Mozilla\Firefox\Profiles\</TargetFilename>
-      <TargetFilename condition="begin with">C:\Program Files (x86)\ossec-agent\</TargetFilename>
-       <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Cache\</TargetFilename>
-      <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Code Cache\</TargetFilename>
-      <TargetFilename condition="begin with">\AppData\Roaming\Microsoft\Windows\Recent\CustomDestinations\</TargetFilename>
-    </FileDelete>
-    <FileCreateTime onmatch="exclude">
-      <TargetFilename condition="contains">\AppData\Roaming\Mozilla\Firefox\Profiles\</TargetFilename>
-      <TargetFilename condition="contains">\AppData\Local\Mozilla\Firefox\Profiles\</TargetFilename>
-      <TargetFilename condition="begin with">C:\Program Files (x86)\ossec-agent\</TargetFilename>
-      <TargetFilename condition="begin with">\AppData\Roaming\Microsoft\Windows\Recent\CustomDestinations\</TargetFilename>
-       <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Cache\</TargetFilename>
-      <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Code Cache\</TargetFilename>
-    </FileCreateTime>
     <FileCreate onmatch="include">
       <TargetFilename condition="begin with">C:\Windows\System32\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\SysWOW64\</TargetFilename>
@@ -101,7 +82,14 @@
       <TargetFilename condition="begin with">C:\Windows\Prefetch\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\Resources\</TargetFilename>
     </FileCreate>
-
+    <FileCreateTime onmatch="exclude">
+      <TargetFilename condition="contains">\AppData\Roaming\Mozilla\Firefox\Profiles\</TargetFilename>
+      <TargetFilename condition="contains">\AppData\Local\Mozilla\Firefox\Profiles\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Program Files (x86)\ossec-agent\</TargetFilename>
+      <TargetFilename condition="begin with">\AppData\Roaming\Microsoft\Windows\Recent\CustomDestinations\</TargetFilename>
+       <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Cache\</TargetFilename>
+      <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Code Cache\</TargetFilename>
+    </FileCreateTime>
     <FileCreateTime onmatch="include">
       <TargetFilename condition="begin with">C:\Windows\System32\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\SysWOW64\</TargetFilename>
@@ -122,7 +110,14 @@
       <TargetFilename condition="end with">.js</TargetFilename>
       <TargetFilename condition="end with">.hta</TargetFilename>
     </FileCreateTime>
-
+    <FileDelete onmatch="exclude">
+       <TargetFilename condition="contains">\AppData\Roaming\Mozilla\Firefox\Profiles\</TargetFilename>
+      <TargetFilename condition="contains">\AppData\Local\Mozilla\Firefox\Profiles\</TargetFilename>
+      <TargetFilename condition="begin with">C:\Program Files (x86)\ossec-agent\</TargetFilename>
+       <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Cache\</TargetFilename>
+      <TargetFilename condition="contains">\AppData\Local\Google\Chrome\User Data\Default\Code Cache\</TargetFilename>
+      <TargetFilename condition="begin with">\AppData\Roaming\Microsoft\Windows\Recent\CustomDestinations\</TargetFilename>
+    </FileDelete>
     <FileDelete onmatch="include">
       <TargetFilename condition="begin with">C:\Windows\System32\</TargetFilename>
       <TargetFilename condition="begin with">C:\Windows\SysWOW64\</TargetFilename>
