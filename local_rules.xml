@@ -1,10 +1,10 @@
 <group name="powershell">
-  <rule id="100200" level="10">
+  <rule id="100200" level="16">
     <if_group>powershell</if_group>
     <field name="win.system.providerName">Microsoft-Windows-PowerShell</field>
     <description>PowerShell ScriptBlock logging detected</description>
   </rule>
-  <rule id="95001" level="10">
+  <rule id="95001" level="16">
   <if_group>windows,security_event</if_group>
   <field name="win.system.eventID">4624</field>
   <field name="win.eventdata.LogonType">10</field>
@@ -27,7 +27,7 @@
 
 </group>
 <group name="windows,local_admin_login,">
-  <rule id="94001" level="10">
+  <rule id="94001" level="16">
     <if_sid>60101</if_sid> <!-- 4624 Successful Logon -->
     <field name="win.eventdata.targetUserName" type="pcre2">(?i)Administrator</field>
     <time>20:00-07:59</time>
@@ -36,16 +36,24 @@
       <id>T1078</id> <!-- Valid Accounts -->
     </mitre>
   </rule>
-  <rule id="94002" level="12">
-    <if_sid>60105</if_sid> <!-- 4720 -->
-    <description>New user account created</description>
+<rule id="94021" level="16">
+  <field name="win.system.eventID">4720</field>
+  <field name="win.eventdata.TargetUserName">.+</field>
+  <description>New user account created (confirmed username)</description>
+  <mitre>
+    <id>T1136</id>
+  </mitre>
+</rule>
+ <rule id="94100" level="5">
+    <field name="win.system.eventID">4625</field>
+    <description>Windows failed logon attempt</description>
     <mitre>
-      <id>T1136</id> <!-- Create Account -->
+      <id>T1110</id> <!-- Brute Force -->
     </mitre>
   </rule>
 
   <!-- User added to Administrators group -->
-  <rule id="94003" level="12">
+  <rule id="94003" level="16">
     <if_sid>60107</if_sid> <!-- 4732 -->
     <field name="win.eventdata.targetUserName" type="pcre2">(?i)Administrators</field>
     <description>User added to local Administrators group</description>
